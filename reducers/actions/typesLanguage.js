@@ -1,0 +1,4 @@
+export const INIT_LANGUAGE = 'INIT_LANGUAGE'
+export const ADD_LANGUAGE = 'ADD_LANGUAGE'
+export const PUT_LANGUAGE = 'PUT_LANGUAGE'
+export const DELETE_LANGUAGE = 'DELETE_LANGUAGE'

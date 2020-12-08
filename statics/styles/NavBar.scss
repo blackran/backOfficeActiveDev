@@ -1,0 +1,52 @@
+.NavBar {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #43a047;
+    &>div {
+        display: flex;    
+        align-items: center;
+    }
+    h1 {
+        color: white;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: #e5ece5;
+        margin: 10px;
+        &:hover {
+            text-decoration: none !important;
+            color: white !important;
+        }
+        &:after {
+            display:block;
+            content: '';
+            border-bottom: solid 1px #e5ece5;
+            transform: scaleX(0);
+            transition: transform 250ms ease-in-out;
+        }
+        &:hover:after { transform: scaleX(1); }
+        &.fromRight:after{ transform-origin:100% 50%; }
+        &.fromLeft:after{  transform-origin:  0% 50%; }
+    }
+    .image {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        &>img {
+            width: 20px;
+            background-size: cover;
+        }
+    }
+    button {
+        border: none;
+        background-color: transparent;
+    }
+}

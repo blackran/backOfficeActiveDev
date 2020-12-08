@@ -1,0 +1,62 @@
+.Home {
+  background: #fefefe;
+  height: calc(100vh - 96px);
+}
+.Home .center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.Home .center .image {
+  border: 3px solid green;
+  border-radius: 50%;
+  position: relative;
+}
+.Home .center .image div {
+  width: 180px;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+}
+.Home .center .image > img {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 10px;
+  z-index: 2;
+}
+.Home .center .ligne {
+  display: flex;
+}
+.Home .center .ligne p {
+  width: 25px;
+  height: 2px;
+  background-color: green;
+  margin: 0 10px;
+  margin: 20px 0;
+}
+.Home .center .btnBottom {
+  width: 400px;
+  background-color: cadetblue;
+  display: flex;
+  justify-content: center;
+}
+.Home .center .btnBottom a {
+  height: 41px;
+  padding: 10px;
+  border-radius: 4px;
+  color: #43a047;
+  background-color: #eeefee;
+}
+.Home .center .btnBottom a:hover {
+  background-color: #43a047;
+  color: white;
+  text-decoration: none !important;
+}
+
+/*# sourceMappingURL=index.css.map */

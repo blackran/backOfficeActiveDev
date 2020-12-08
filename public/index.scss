@@ -1,0 +1,72 @@
+.Home {
+    background: #fefefe;
+    height: calc(100vh - 96px);
+    .center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        .image{
+            // border-top: 3px solid green;
+            // border-bottom: 3px solid green;
+            border: 3px solid green;
+            border-radius: 50%;
+            position: relative;
+            div {
+                width: 180px;
+                // height: 63px;
+                background-color: white;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                z-index: 1;
+            }
+            // div:nth-child(2) {
+            //     border: 1px solid red;
+            //     // transform: translate(-50%, -50%) rotate(20deg);
+            // }
+            // div:nth-child(3) {
+            //     border: 1px solid green;
+            //     // transform: translate(-50%, -50%) rotate(-20deg);
+            // }
+            &>img{
+                position: relative;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                margin: 10px;
+                z-index: 2;
+            }
+        }
+        .ligne {
+            display: flex;
+            p {
+                width: 25px;
+                height: 2px;
+                background-color: green;
+                margin: 0 10px;
+                margin: 20px 0;
+            }
+        }
+        .btnBottom {
+            // height: 300px;
+            width: 400px;
+            background-color: cadetblue;
+            display: flex;
+            justify-content: center;
+            a {
+                height: 41px;
+                padding: 10px;
+                border-radius: 4px;
+                color: #43a047;
+                background-color: #eeefee;
+                &:hover {
+                    background-color: #43a047;
+                    color: white;
+                    text-decoration: none !important;
+                }
+            }
+        }
+    }
+}

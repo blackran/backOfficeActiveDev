@@ -1,0 +1,24 @@
+.Login {
+    background: #fefefe;
+    height: calc(100vh - 96px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &>.Center {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        button{
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 30px;
+        }
+    }
+}
