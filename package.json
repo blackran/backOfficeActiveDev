@@ -5,12 +5,13 @@
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --colors",
     "doc": "jsdoc -c jsdoc.json",
-    "export": "yarn build && next export"
+    "export": "yarn build && next export",
+    "gh-pages": "gh-pages -d out"
   },
   "dependencies": {
     "@babel/preset-env": "^7.12.7",

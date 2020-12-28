@@ -21,5 +21,5 @@ jobs:
       run: |
         git config --global user.email "andrianantenainarasolondraibe@gmail.com"
         git config --global user.name "blackran"
-        git remote set-url origin https://${{secrets.GITHUB_TOKEN}}@github.com/blackran/best4santeDasboard.git
+        git remote set-url origin https://${{secrets.GITHUB_TOKEN}}@github.com/blackran/backOfficheActiveDev.git
         npm run export
