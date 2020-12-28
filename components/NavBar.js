@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
 import jwt from 'jwt-decode'
 import { useRouter } from 'next/router'
+import { useSpring, animated } from 'react-spring'
 
 import {
     findOneUser
@@ -19,36 +20,54 @@ export default function NavBar () {
     const [user, setUser] = useState({})
     const isAdmin = useSelector(state => state.global.isAdmin)
     const dispatch = useDispatch()
-    const url = [
+    const [mouseHover, useMouseUser] = useState(false)
+    const url = useMemo(() => [
         '/User'
-    ]
+    ], [])
+    const fetchData = async (token) => {
+        const stock = await findOneUser(token.idUser)
+        setUser(stock)
+    }
     useEffect(() => {
-        dispatch({ type: 'IS_ADMIN', data: false })
         if (isAuth(router.pathname, url)) {
             if (localStorage.hasOwnProperty('Token')) { // eslint-disable-line
+                dispatch({ type: 'IS_ADMIN', data: false })
                 const token = jwt(localStorage.getItem('Token'))
-                async function fetchData () {
-                    const stock = await findOneUser(token.idUser)
-                    setUser(stock)
-                }
-                fetchData()
+                fetchData(token)
                 if (typeof token.idUser === 'number') {
-                    if (token.isAdmin === 'y') {
-                        dispatch({ type: 'IS_ADMIN', data: true })
-                    } else {
-                        router.push('/Login')
+                    if (token.isAdmin !== 'y') {
+                        return router.push('/Login')
                     }
+                    dispatch({ type: 'IS_ADMIN', data: true })
                 }
             } else {
-                router.push('/Login')
+                if (router.pathname !== '/Login') {
+                    router.push('/Login')
+                }
             }
         }
-    }, [router.pathname])
+    }, [dispatch, router, url])
 
     const logout = () => {
-        localStorage.removeItem('Token')
-        dispatch({ type: 'IS_ADMIN', data: false })
-        router.push('/Login')
+        if (router) {
+            router.prefetch('/Login')
+            localStorage.removeItem('Token')
+            dispatch({ type: 'IS_ADMIN', data: false })
+            router.push('/Login')
+        }
+    }
+
+    const styleSpring = useSpring({
+        from: { width: 26 },
+        to: {
+            width: mouseHover ? 92 : 26,
+            padding: mouseHover ? 'auto' : 0,
+            justifyContent: mouseHover ? 'flex-start' : 'center'
+        }
+    })
+
+    const UserMouseUserConstume = (e) => {
+        useMouseUser(e)
     }
 
     return (
@@ -59,15 +78,11 @@ export default function NavBar () {
                 </h1>
             </Link>
             <div>
-                <Link href='/Contacts'>
-                    Contacts
-                </Link>
                 <Link href='/Projects'>
                    Projet
                 </Link>
-                <div> | </div>
-                <Link href='/Login'>
-                    Login
+                <Link href='/Contacts'>
+                    Contacts
                 </Link>
                 {
                     isAdmin &&
@@ -75,13 +90,37 @@ export default function NavBar () {
                             <Link href='/User'>
                                 User
                             </Link>
-                            <div className='image'>
-                                <img src={user.imgUser} alt='user_connecter'/>
+                        </>
+                }
+
+                {/* <div> | </div> */}
+                {/* <Link href='/Login'> */}
+                {/*     Login */}
+                {/* </Link> */}
+                {
+                    isAdmin &&
+                        <animated.div
+                            className='user'
+                            style={styleSpring}
+                            onMouseEnter={() => UserMouseUserConstume(true)}
+                            onMouseLeave={() => UserMouseUserConstume(false)}
+                        >
+                            <div
+                                className='image'
+                            >
+                                { user
+                                    ? <img src={user.imgUser } alt='user_connecter'/>
+                                    : <img src='/add-new-project.jpg' alt='user_connecter'/>
+                                }
                             </div>
-                            <button onClick={logout}>
+                            {' '}
+                            <button
+                                onClick={logout}
+                                style={{ display: mouseHover ? '' : 'none' }}
+                            >
                                 Logout
                             </button>
-                        </>
+                        </animated.div>
                 }
             </div>
         </div>

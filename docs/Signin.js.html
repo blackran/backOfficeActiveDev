@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Signin.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Signin.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect } from 'react'
+import {
+    Button,
+    TextField,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    Radio,
+    FormControlLabel,
+    InputLabel,
+    IconButton,
+    InputAdornment,
+    OutlinedInput
+} from '@material-ui/core'
+import Dropzone from 'react-dropzone'
+import {
+    Image,
+    Visibility,
+    VisibilityOff
+} from '@material-ui/icons'
+import {
+    addUser,
+    findOneUser,
+    putUser
+} from './utils/Utils'
+import jwt from 'jwt-decode'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
+
+/**
+ * @params {props} e - objet contient le password et email
+ * @returns {jsx} - renvoi une rien
+ */
+
+function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginInputImage }) {
+    const [isShow, setIsShow] = React.useState(false)
+
+    return (
+        &lt;div className='Formulaire'>
+            &lt;div>
+                &lt;div>
+                    &lt;TextField
+                        label="firstNameUser"
+                        value={state.firstNameUser}
+                        onChange={onChangeInput}
+                        margin="normal"
+                        variant="outlined"
+                        name="firstNameUser"
+                    />
+                    {' '}
+                    &lt;TextField
+                        label="lastNameUser"
+                        value={state.lastNameUser}
+                        onChange={onChangeInput}
+                        margin="normal"
+                        variant="outlined"
+                        name="lastNameUser"
+                    />
+                &lt;/div>
+                &lt;div>
+                    &lt;TextField
+                        label="emailUser"
+                        value={state.emailUser}
+                        onChange={onChangeInput}
+                        margin="normal"
+                        variant="outlined"
+                        name="emailUser"
+                        type='email'
+                    />
+                    &lt;FormControl variant="outlined">
+                        &lt;InputLabel htmlFor="outlined-adornment-password">Password&lt;/InputLabel>
+                        &lt;OutlinedInput
+                            id="outlined-adornment-password"
+                            type={isShow ? 'text' : 'password'}
+                            value={state.passwordUser}
+                            onChange={onChangeInput}
+                            name='passwordUser'
+                            endAdornment={
+                                &lt;InputAdornment position="end">
+                                    &lt;IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setIsShow(!isShow)}
+                                        onMouseDown={() => setIsShow(!isShow)}
+                                        edge="end"
+                                    >
+                                        {isShow ? &lt;Visibility /> : &lt;VisibilityOff />}
+                                    &lt;/IconButton>
+                                &lt;/InputAdornment>
+                            }
+                            labelWidth={70}
+                        />
+                    &lt;/FormControl>
+                &lt;/div>
+                &lt;div style={{ width: 200 }}>
+                    &lt;Dropzone onDrop={ (e) => { onChangeLoginInputImage(e) } }>
+                        {({ getRootProps, getInputProps }) => (
+                            &lt;section>
+                                &lt;div {...getRootProps()}>
+                                    &lt;input {...getInputProps()} />
+                                    &lt;div className='changeImage' >
+                                        &lt;div>
+                                            {
+                                                state.imgUser
+                                                    ? &lt;img src={state.imgUser} alt='image_import'/>
+                                                    : &lt;Image style={{ fontSize: 64 }}/>
+                                            }
+                                        &lt;/div>
+                                        edit profile
+                                    &lt;/div>
+                                &lt;/div>
+                            &lt;/section>
+                        )}
+                    &lt;/Dropzone>
+                &lt;/div>
+                &lt;div
+                    style={{
+                        marginTop: 16,
+                        marginBottom: 8
+                    }}
+                >
+                    &lt;FormControl component="fieldset">
+                        &lt;FormLabel component="legend">Admin&lt;/FormLabel>
+                        &lt;RadioGroup
+                            aria-label="isAdmin"
+                            name="isAdmin"
+                            value={state.isAdmin}
+                            // onChange={onChangeInput}
+                            row
+                        >
+                            &lt;FormControlLabel value="y" control={&lt;Radio />} label="Oui" />
+                            &lt;FormControlLabel value="n" control={&lt;Radio />} label="Non" />
+                        &lt;/RadioGroup>
+                    &lt;/FormControl>
+                &lt;/div>
+            &lt;/div>
+            &lt;div>
+                &lt;Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setIsAdd(false)}
+                    className='btnDelete'
+                >
+                Anuller
+                &lt;/Button>
+                {' '}
+                &lt;Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                        setIsAdd(true)
+                        onSubmit()
+                    }}
+                    className='btnDelete'
+                >
+                    Enregistrer
+                &lt;/Button>
+
+            &lt;/div>
+        &lt;/div>
+    )
+}
+function Signin (props) {
+    const router = useRouter()
+    const [state, setState] = React.useState({
+        idUser: 0,
+        lastNameUser: '',
+        firstNameUser: '',
+        imgUser: '',
+        passwordUser: '',
+        emailUser: '',
+        isAdmin: 'n'
+    })
+    const [isModif, setIsModif] = React.useState(false)
+    const dispatch = useDispatch()
+
+    const onChangeInput = (e) => {
+        setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
+    }
+
+    const onChangeLoginInputImage = async (files) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(files[0])
+        reader.onload = (e) => {
+            if (state.imgUser !== e.target.result) {
+                setState(Object.assign({}, state, { imgUser: e.target.result }))
+            }
+        }
+    }
+
+    const onSubmit = async (e) => {
+        let resp
+        if (isModif) {
+            resp = await putUser(state)
+        } else {
+            resp = await addUser(state)
+        }
+        if (resp) {
+            const data = await findOneUser(jwt(resp).idUser)
+            // console.log(jwt(resp).idUser, data)
+            if (isModif) {
+                dispatch({ type: 'PUT_USER', data })
+            } else {
+                dispatch({ type: 'ADD_USER', data })
+            }
+            localStorage.setItem('Token', resp)
+            setState({
+                lastNameUser: '',
+                firstNameUser: '',
+                imgUser: '',
+                passwordUser: '',
+                emailUser: '',
+                isAdmin: 'n'
+            })
+            setIsModif(false)
+        }
+    }
+
+    const setIsAdd = () => {
+        setState({
+            lastNameUser: '',
+            firstNameUser: '',
+            imgUser: '',
+            passwordUser: '',
+            emailUser: '',
+            isAdmin: 'n'
+        })
+        router.push('/Login')
+    }
+
+    useEffect(() => {
+        const smallFunction = async () => {
+            setIsModif(false)
+            if (props.id) {
+                const user = await findOneUser(props.id)
+                if (user) {
+                    setState({
+                        idUser: user.idUser,
+                        lastNameUser: user.lastNameUser,
+                        firstNameUser: user.firstNameUser,
+                        imgUser: user.imgUser,
+                        passwordUser: '',
+                        emailUser: user.emailUser,
+                        isAdmin: user.isAdmin
+                    })
+                    setIsModif(true)
+                }
+            }
+        }
+        smallFunction()
+    }, [props.id])
+
+    return (
+        &lt;div className='Signin'>
+            &lt;Formulaire
+                state={state}
+                setIsAdd={setIsAdd}
+                onSubmit={onSubmit}
+                onChangeInput={onChangeInput}
+                onChangeLoginInputImage={onChangeLoginInputImage}
+            />
+        &lt;/div>
+    )
+}
+
+Signin.getInitialProps = async ({ query: { id } }) => {
+    return { id }
+}
+
+export default Signin
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Formulaire">Formulaire</a></li><li><a href="global.html#login">login</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 09 2020 12:15:47 GMT+0300 (East Africa Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

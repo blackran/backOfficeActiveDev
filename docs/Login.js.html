@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Login.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import {
+    TextField,
+    InputLabel,
+    IconButton,
+    InputAdornment,
+    Grid,
+    FormControl,
+    Input
+} from '@material-ui/core'
+
+import {
+    Visibility,
+    VisibilityOff,
+    Person,
+    Https
+} from '@material-ui/icons'
+
+import { useRouter } from 'next/router'
+import { login } from './utils/Utils'
+
+function Login () {
+    const router = useRouter()
+    const [state, setState] = React.useState({ email: '', password: '' })
+    const [error, setError] = React.useState(false)
+    const [isShow, setIsShow] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const onChangeInput = (e) => {
+        setState(true)
+        setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
+    }
+
+    /**
+     * @params {*} e - objet contient le password et email
+     * @returns {void} - renvoi une rien
+     */
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        setIsLoading(true)
+        if (!(state.email &amp;&amp; state.password)) {
+            return setError(true)
+        }
+        const token = await login(state)
+        if (token) {
+            setIsLoading(false)
+            localStorage.setItem('Token', token)
+            router.push('/User')
+        }
+    }
+
+    const { email, password } = state
+    return (
+        &lt;div className='Login'>
+            &lt;form className="Center" >
+                &lt;div>
+                    &lt;Grid container spacing={1} alignItems="flex-end">
+                        &lt;Grid item>
+                            &lt;Person />
+                        &lt;/Grid>
+                        &lt;Grid item>
+                            &lt;TextField
+                                label="Email *"
+                                value={email}
+                                error={error}
+                                onChange={onChangeInput}
+                                // className="max-width"
+                                name='email'
+                                style={{ width: 215 }}
+                            />
+                        &lt;/Grid>
+                    &lt;/Grid>
+                    &lt;Grid container spacing={1} alignItems="flex-end">
+                        &lt;Grid item>
+                            &lt;Https />
+                        &lt;/Grid>
+                        &lt;Grid item>
+                            &lt;FormControl>
+                                &lt;InputLabel htmlFor="outlined-adornment-password">Mot de passe&lt;/InputLabel>
+                                &lt;Input
+                                    type={isShow ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={onChangeInput}
+                                    name='password'
+                                    error={error}
+                                    style={{ width: 215 }}
+                                    endAdornment={
+                                        &lt;InputAdornment position="end">
+                                            &lt;IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={() => setIsShow(!isShow)}
+                                                onMouseDown={() => setIsShow(!isShow)}
+                                                edge="end"
+                                            >
+                                                {isShow ? &lt;Visibility /> : &lt;VisibilityOff />}
+                                            &lt;/IconButton>
+                                        &lt;/InputAdornment>
+                                    }
+                                    labelWidth={70}
+                                />
+                            &lt;/FormControl>
+                        &lt;/Grid>
+                    &lt;/Grid>
+                &lt;/div>
+                &lt;div className='button'>
+                    &lt;input
+                        style={{ cursor: 'pointer' }}
+                        className="max-width btn button-light-blue"
+                        type="button"
+                        value={isLoading ? 'Chargement...' : 'Connexion'}
+                        onClick={onSubmit}
+                    />
+                    &lt;button onClick={() => router.push('Signin')}>
+                            Creer une compte
+                    &lt;/button>
+                &lt;/div>
+            &lt;/form>
+        &lt;/div>
+    )
+}
+
+export default Login
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Formulaire">Formulaire</a></li><li><a href="global.html#login">login</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 09 2020 12:15:47 GMT+0300 (East Africa Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

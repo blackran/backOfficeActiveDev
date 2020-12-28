@@ -1,0 +1,31 @@
+.Dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .BlockDashboard {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        &>div {
+            width: 250px;
+            display: flex;
+            background-color: #ecf5ed;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            img {
+                width: 80px;
+                height: 80px;
+            }
+            h1 {
+                font-size: 1.2rem;
+                margin: 0.5rem 0 0 0;
+            }
+        }
+    }
+}

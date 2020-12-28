@@ -31,6 +31,11 @@ function Login () {
         setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
     }
 
+    /**
+     * @params {*} e - objet contient le password et email
+     * @returns {void} - renvoi une rien
+     */
+
     const onSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
@@ -41,8 +46,9 @@ function Login () {
         if (token) {
             setIsLoading(false)
             localStorage.setItem('Token', token)
-            router.push('/User')
+            router.push('/BackOffice')
         }
+        setIsLoading(false)
     }
 
     const { email, password } = state
@@ -106,9 +112,12 @@ function Login () {
                         value={isLoading ? 'Chargement...' : 'Connexion'}
                         onClick={onSubmit}
                     />
-                    <button onClick={() => router.push('Signin')}>
-                            Creer une compte
-                    </button>
+                    {/* <button onClick={() => { */}
+                    {/*     console.log('/Signin') */}
+                    {/*     router.push('/Signin') */}
+                    {/* }}> */}
+                    {/*     Creer une compte */}
+                    {/* </button> */}
                 </div>
             </form>
         </div>

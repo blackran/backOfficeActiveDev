@@ -1,4 +1,4 @@
-import NavBar from '../components/NavBar'
+// import NavBar from '../components/NavBar'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core'
 
 // import * as serviceWorker from '../reducers/serviceWorker'
@@ -9,14 +9,14 @@ import axios from 'axios'
 import { green } from '@material-ui/core/colors/'
 
 import '../statics/styles/Global.scss'
-import '../statics/styles/NavBar.scss'
-import '../statics/styles/Projects.scss'
+import '../statics/styles/Dashboard.scss'
+import '../statics/styles/Principal.scss'
 import '../statics/styles/Login.scss'
-import '../statics/styles/User.scss'
-import '../statics/styles/Signin.scss'
-import '../statics/styles/BlockProject.scss'
-import '../statics/styles/ProjectsDetails.scss'
-import '../statics/styles/Language.scss'
+import '../statics/styles/BackOffice.scss'
+import '../statics/styles/NavBackOffice.scss'
+import '../statics/styles/NavTopBackOffice.scss'
+import '../statics/styles/Membres.scss'
+import '../statics/styles/Projects.scss'
 
 // import 'jodit'
 // import 'jodit/build/jodit.min.css'
@@ -27,16 +27,6 @@ import 'react-summernote/dist/react-summernote.css' // import styles
 // import 'bootstrap/js/dropdown'
 // import 'bootstrap/js/tooltip'
 import 'bootstrap/dist/css/bootstrap.css'
-
-// const NavBar = require('../components/NavBar')
-// const { MuiThemeProvider, createMuiTheme } = require('@material-ui/core')
-//
-// // import * as serviceWorker from '../reducers/serviceWorker'
-// const { Provider } = require('react-redux')
-// const store = require('../reducers/store')
-// const axios = require('axios')
-//
-// const { green } = require('@material-ui/core/colors/')
 
 const theme = createMuiTheme({
     palette: {
@@ -62,7 +52,7 @@ function MyApp ({ Component, pageProps }) {
     return (<Provider store={store}>
         <MuiThemeProvider theme={theme}>
             <div>
-                <NavBar/>
+                {/* <NavBar/> */}
                 <Component {...pageProps} />
             </div>
         </MuiThemeProvider>

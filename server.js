@@ -14,13 +14,13 @@ app.prepare()
             return app.render(req, res, '/Login', req.query)
         })
 
-        server.get('/ProjectsDetails/:id', (req, res) => {
-            return app.render(req, res, '/ProjectsDetails', { id: req.params.id })
-        })
-
-        server.get('/Signin/:id', (req, res) => {
-            return app.render(req, res, '/Signin', { id: req.params.id })
-        })
+        // server.get('/ProjectsDetails/:id', (req, res) => {
+        //     return app.render(req, res, '/ProjectsDetails', { id: req.params.id })
+        // })
+        //
+        // server.get('/Signin/:id', (req, res) => {
+        //     return app.render(req, res, '/Signin', { id: req.params.id })
+        // })
 
         server.get('*', (req, res) => {
             return handle(req, res)

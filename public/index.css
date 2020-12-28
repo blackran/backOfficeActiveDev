@@ -30,33 +30,42 @@
   margin: 10px;
   z-index: 2;
 }
-.Home .center .ligne {
+.Home .center div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Home .center div .ligne {
   display: flex;
 }
-.Home .center .ligne p {
+.Home .center div .ligne p {
   width: 25px;
   height: 2px;
   background-color: green;
   margin: 0 10px;
   margin: 20px 0;
 }
-.Home .center .btnBottom {
+.Home .center div div.btnBottom {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 400px;
   background-color: cadetblue;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
-.Home .center .btnBottom a {
-  height: 41px;
-  padding: 10px;
-  border-radius: 4px;
-  color: #43a047;
-  background-color: #eeefee;
+.Home .center div div.btnBottom .oneBlock {
+  background-color: green;
+  width: 180px;
+  height: 160px;
+  margin: 5px;
 }
-.Home .center .btnBottom a:hover {
-  background-color: #43a047;
-  color: white;
-  text-decoration: none !important;
+.Home .center div div.btnBottom .tous {
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
 }
 
 /*# sourceMappingURL=index.css.map */

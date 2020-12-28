@@ -1,0 +1,4 @@
+export const INIT_MEMBRES = 'INIT_MEMBRES'
+export const ADD_MEMBRES = 'ADD_MEMBRES'
+export const PUT_MEMBRES = 'PUT_MEMBRES'
+export const DELETE_MEMBRES = 'DELETE_MEMBRES'

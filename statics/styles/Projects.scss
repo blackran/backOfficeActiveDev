@@ -1,8 +1,14 @@
 .Projects {
-    .listProjects {
+    .blockProjects {
         display: flex;
-        h1 {
-            font-size: 20px;
+        align-items: center;
+        background-color: red;
+        border-radius: 4px;
+        height: 250px;
+        overflow: hidden;
+        width: 400px;
+        img {
+            height: 230px;
         }
     }
 }
