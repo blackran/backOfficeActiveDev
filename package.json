@@ -11,7 +11,8 @@
     "test:coverage": "jest --coverage --colors",
     "doc": "jsdoc -c jsdoc.json",
     "export": "yarn build && next export",
-    "gh-pages": "gh-pages -d out"
+    "gh-pages": "gh-pages -d out",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@babel/preset-env": "^7.12.7",
