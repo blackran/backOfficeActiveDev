@@ -10,7 +10,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --colors",
     "doc": "jsdoc -c jsdoc.json",
-    "export": "yarn build && next export",
+    "export": "next export",
     "gh-pages": "gh-pages -d out",
     "heroku-postbuild": "npm run build"
   },
