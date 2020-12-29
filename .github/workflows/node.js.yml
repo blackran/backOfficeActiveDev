@@ -26,6 +26,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
     - run: yarn build
+      env:
+        NEXT_PUBLIC_BASE_PATH:"/backOfficeActiveDev"
     - run: yarn export
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@3.7.1
