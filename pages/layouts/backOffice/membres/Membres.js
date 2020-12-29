@@ -29,6 +29,8 @@ import { useSelector, useDispatch } from 'react-redux'
 //     deleteUser
 // } from './utils/Utils'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginInputImage }) {
     const [isShow, setIsShow] = React.useState(false)
 
@@ -166,7 +168,7 @@ function Column ({ data, onDeleteUser, onModifierUser, i }) {
         , (i + 1 * 1000))
     }, [animate, i])
     return (<animated.tr key={idMembres} style={style}>
-        <td><img src='/me.jpg' alt='image_user' className='image_user'/></td>
+        <td><img src={ prefix + '/me.jpg' } alt='image_user' className='image_user'/></td>
         <td>{nomMembres}</td>
         <td>{prenomMembres}</td>
         <td className='email'>{emailMembres}</td>

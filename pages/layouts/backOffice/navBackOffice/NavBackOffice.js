@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 function NavBackOffice (props) {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
@@ -46,7 +48,7 @@ function NavBackOffice (props) {
         <div className='NavBackOffice'>
             <div className='Header'>
                 <img
-                    src='/logo.png'
+                    src={ prefix + '/logo.png' }
                     alt='logo'
                 />
                 <h1>Activedev</h1>

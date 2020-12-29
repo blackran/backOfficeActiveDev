@@ -29,6 +29,8 @@ import { useSelector, useDispatch } from 'react-redux'
 //     deleteUser
 // } from './utils/Utils'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginInputImage }) {
     const [isShow, setIsShow] = React.useState(false)
 
@@ -167,7 +169,7 @@ function Column ({ data, onDeleteUser, onModifierUser, i }) {
     }, [animate, i])
     return (<animated.div key={idProjets} style={style}>
         <div className='blockProjects'>
-            <img src='/me.jpg' alt='image_user' className='image_user'/>
+            <img src={ prefix + '/me.jpg' } alt='image_user' className='image_user'/>
             {}
             <div>{titleProjets}</div>
             <div className='email'>{emailMembres}</div>
