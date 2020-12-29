@@ -14,7 +14,7 @@ export default function Home () {
             <main>
                 <div className='Home'>
                     <div className='center'>
-                        <Link href={ prefix + 'Login'}>
+                        <Link href={ '/Login'}>
                             Login
                         </Link>
                         Home page
