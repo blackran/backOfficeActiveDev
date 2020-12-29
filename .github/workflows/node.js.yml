@@ -27,8 +27,9 @@ jobs:
     - run: yarn install
     - run: yarn build
       env:
-        NEXT_PUBLIC_BASE_PATH:"/backOfficeActiveDev"
+        NEXT_PUBLIC_BASE_PATH:'/backOfficeActiveDev'
     - run: yarn export
+    - run: touch ./out/.nojekyll
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
