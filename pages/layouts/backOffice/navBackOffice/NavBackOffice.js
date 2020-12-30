@@ -18,6 +18,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 
+import Swal from 'sweetalert2'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -41,7 +43,43 @@ function NavBackOffice (props) {
     }
 
     const deconexion = () => {
-        console.log('deconexion')
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Êtes-vous sûr?',
+            text: 'Vous ne pourrez pas revenir en arrière!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui, deconnecter!',
+            cancelButtonText: 'Non, annulez!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('deconnecter')
+                // swalWithBootstrapButtons.fire(
+                //     'Deleted!',
+                //     'Your file has been deleted.',
+                //     'success'
+                // )
+            }
+            // } else if (
+            //     /* Read more about handling dismissals below */
+            //     result.dismiss === Swal.DismissReason.cancel
+            // ) {
+            //
+            //     // swalWithBootstrapButtons.fire(
+            //     //     'Cancelled',
+            //     //     'Your imaginary file is safe :)',
+            //     //     'error'
+            //     // )
+            // }
+        })
     }
 
     return (
