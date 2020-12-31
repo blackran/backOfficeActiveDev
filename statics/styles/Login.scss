@@ -1,24 +1,69 @@
 .Login {
     background: #fefefe;
-    height: calc(100vh - 96px);
+    // height: calc(100vh - 96px);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #F7F7F7;
     &>.Center {
         display: flex;
         justify-content: center;
         flex-direction: column;
         align-items: center;
     }
-    .button {
+    .header {
+        p {
+            font-size: 14px;
+            line-height: 21px;
+            color: #000000;
+        }
+    }
+    .body {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        button{
+        align-items: flex-start;
+        padding: 20px;
+        position: static;
+        width: 262px;
+        height: 184px;
+        left: 0px;
+        top: 145px;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        margin: 0px 24px;
+        &>div {
+            width: 222px;
+            height: 38px;
+            background: #EDEDED;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            input {
+                height: 38px;
+                background: #EDEDED;
+                border: none;
+                border-radius: 10px;
+                padding: 12px;
+                &:focus {
+                    outline: none;
+                }
+            }
+            div {
+               width: 100%;
+            }
+        }
+        input[type='button']{
+            height: 38px;
+            width: 222px;
             border: none;
-            padding: 10px;
             border-radius: 4px;
-            margin-top: 30px;
+            background: #E8003A;
+            border-radius: 40px;
+            color: white;
         }
     }
 }
+

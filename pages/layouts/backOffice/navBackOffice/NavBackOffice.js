@@ -19,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 
 import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 function NavBackOffice (props) {
+    const router = useRouter()
     const classes = useStyles()
     const [open, setOpen] = useState(false)
 
@@ -61,24 +63,8 @@ function NavBackOffice (props) {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('deconnecter')
-                // swalWithBootstrapButtons.fire(
-                //     'Deleted!',
-                //     'Your file has been deleted.',
-                //     'success'
-                // )
+                router.push('/Login')
             }
-            // } else if (
-            //     /* Read more about handling dismissals below */
-            //     result.dismiss === Swal.DismissReason.cancel
-            // ) {
-            //
-            //     // swalWithBootstrapButtons.fire(
-            //     //     'Cancelled',
-            //     //     'Your imaginary file is safe :)',
-            //     //     'error'
-            //     // )
-            // }
         })
     }
 
@@ -86,7 +72,7 @@ function NavBackOffice (props) {
         <div className='NavBackOffice'>
             <div className='Header'>
                 <img
-                    src={ prefix + '/logo.png' }
+                    src={ prefix + '/logo.svg' }
                     alt='logo'
                 />
                 <h1>Activedev</h1>

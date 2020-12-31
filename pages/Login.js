@@ -1,19 +1,12 @@
 import React from 'react'
 import {
-    TextField,
-    InputLabel,
     IconButton,
-    InputAdornment,
-    Grid,
-    FormControl,
-    Input
+    InputAdornment
 } from '@material-ui/core'
 
 import {
     Visibility,
-    VisibilityOff,
-    Person,
-    Https
+    VisibilityOff
 } from '@material-ui/icons'
 
 import { useRouter } from 'next/router'
@@ -28,6 +21,7 @@ function Login () {
 
     const onChangeInput = (e) => {
         setState(true)
+        setError(false)
         setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
     }
 
@@ -40,6 +34,7 @@ function Login () {
         e.preventDefault()
         setIsLoading(true)
         if (!(state.email && state.password)) {
+            setIsLoading(false)
             return setError(true)
         }
         const token = await login(state)
@@ -47,64 +42,53 @@ function Login () {
             setIsLoading(false)
             localStorage.setItem('Token', token)
             router.push('/BackOffice')
+        } else {
+            setIsLoading(false)
         }
-        setIsLoading(false)
     }
 
     const { email, password } = state
     return (
         <div className='Login'>
             <form className="Center" >
-                <div>
-                    <Grid container spacing={1} alignItems="flex-end">
-                        <Grid item>
-                            <Person />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                label="Email *"
-                                value={email}
-                                error={error}
-                                onChange={onChangeInput}
-                                // className="max-width"
-                                name='email'
-                                style={{ width: 215 }}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={1} alignItems="flex-end">
-                        <Grid item>
-                            <Https />
-                        </Grid>
-                        <Grid item>
-                            <FormControl>
-                                <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
-                                <Input
-                                    type={isShow ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={onChangeInput}
-                                    name='password'
-                                    error={error}
-                                    style={{ width: 215 }}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={() => setIsShow(!isShow)}
-                                                onMouseDown={() => setIsShow(!isShow)}
-                                                edge="end"
-                                            >
-                                                {isShow ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={70}
-                                />
-                            </FormControl>
-                        </Grid>
-                    </Grid>
+                <div className='header'>
+                    <img src='./logo.png' alt='activedev'/>
+                    <p>Authentification</p>
                 </div>
-                <div className='button'>
+                <div className='body'>
+                    <div>
+                        <input
+                            type='text'
+                            label="Email *"
+                            value={email}
+                            error={error}
+                            onChange={onChangeInput}
+                            name='email'
+                            style={{ width: 222 }}
+                            placeholder='Nom d’utilisateur'
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type={isShow ? 'text' : 'password'}
+                            value={password}
+                            onChange={onChangeInput}
+                            name='password'
+                            error={error}
+                            style={{ width: 167 }}
+                            placeholder='Mot de passe'
+                        />
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setIsShow(!isShow)}
+                                onMouseDown={() => setIsShow(!isShow)}
+                                edge="end"
+                            >
+                                {isShow ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                    </div>
                     <input
                         style={{ cursor: 'pointer' }}
                         className="max-width btn button-light-blue"
@@ -112,12 +96,6 @@ function Login () {
                         value={isLoading ? 'Chargement...' : 'Connexion'}
                         onClick={onSubmit}
                     />
-                    {/* <button onClick={() => { */}
-                    {/*     console.log('/Signin') */}
-                    {/*     router.push('/Signin') */}
-                    {/* }}> */}
-                    {/*     Creer une compte */}
-                    {/* </button> */}
                 </div>
             </form>
         </div>
