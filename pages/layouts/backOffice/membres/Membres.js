@@ -83,7 +83,7 @@ function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeIn
                                             {
                                                 state.imgUser
                                                     ? <img src={state.imgUser} alt='image_import'/>
-                                                    : <img src={ prefix + './anon.png' } alt='icon_default'/>
+                                                    : <img src={ prefix + '/anon.png' } alt='icon_default'/>
                                             }
                                         </div>
                                         { mouse && <p>edit profile</p> }
