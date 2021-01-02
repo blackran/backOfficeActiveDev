@@ -2,44 +2,114 @@
     .Formulaire {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        padding: 20px;
         align-items: center;
-        &>div {
-            width: 490px;
-            &>div {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
+        h1 {
+            width: 725px;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 21px;
+            color: #000000;
+        }
+        .flex {
+            width: 725px;
+            display: flex;
+            .right {
+                margin-left: 20px;
                 &>div {
-                    margin-top: 16px;
-                    margin-bottom: 8px;
-                    width: 239px;
+                    margin-bottom: 20px;
+                    p {
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 16px;
+                        color: #717171;
+                    }
+                    .checkboxIsAdmin {
+                        margin-left: 10px;
+                    }
+                    input {
+                        display: block !important;
+                        border: none;
+                        width: 500px;
+                        height: 38px;
+                        background: #EDEDED;
+                        border-radius: 10px;
+                        order: 0;
+                        align-self: stretch;
+                        flex-grow: 0;
+                        margin-bottom: 10px;
+                        padding-left: 10px;
+                    }
+                    .passwordFlex {
+                        display: flex;
+                        &>div {
+                            width: 240px;
+                            display: flex;
+                            border: none;
+                            height: 38px;
+                            background: #EDEDED;
+                            border-radius: 10px;
+                            order: 0;
+                            align-self: stretch;
+                            flex-grow: 0;
+                            margin-bottom: 10px;
+                            align-items: center;
+                            .MuiInputAdornment-positionEnd {
+                                margin-left: 25px;
+                            }
+                        }
+                    }
+                }
+                .btnEnregistrer {
+                    display: flex;
+                    justify-content: center;
+                    button {
+                            border-radius: 40px;
+                        &:nth-child(2) {
+                            background: #E8003A;
+                            color: white;
+                            margin-left: 10px;
+                        }
+                    }
                 }
             }
         }
     }
     .changeImage {
-        padding: 20px;
+        width: 200px;
         cursor: pointer;
         border: 1px solid #c4c4c4;
         border-radius: 4px;
         text-align: center;
-        margin-top: 16px;
-        margin-bottom: 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        position: relative;
+        overflow: hidden;
+        p {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            background-color: #e8003a;
+            color: white;
+            bottom: 0px;
+            left: 0px;
+            height: 40px;
+            margin: 0px;
+        }
         &>div {
-            width: 50px;
-            height: 50px;
+            width: 200px;
+            height: 200px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 5px;
             img {
-                width: 50px;
+                width: 200px;
             }
         }
     }
@@ -52,13 +122,26 @@
         .addButton {
             width: 100%;
             display: flex;
-            justify-content: flex-end;
-            padding: 10px 10px 0 0;
+            justify-content: space-between;
+            max-width: 900px;
+            button {
+                padding: 15px;
+                width: 120px;
+                height: 40px;
+                background: #FFFFFF;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+                border-radius: 100px;
+            }
         }
         table {
             width: 50%;
             margin: 10px;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 10px;
+
         }
         th {
             border-bottom: 1px solid #cadaca;
@@ -66,6 +149,7 @@
         }
         td, th {
             padding: 10px 20px;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
         }
         .image_user {
             height: 25px;

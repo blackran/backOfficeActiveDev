@@ -8,19 +8,13 @@ import {
     Add
 } from '@material-ui/icons'
 import {
-    TextField,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
     InputAdornment,
     IconButton,
-    FormLabel,
-    Radio,
     Button,
-    RadioGroup,
-    FormControlLabel
+    Switch
 } from '@material-ui/core'
 import { useSpring, animated } from 'react-spring'
+import { withStyles } from '@material-ui/core/styles'
 import Dropzone from 'react-dropzone'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -31,66 +25,54 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginInputImage }) {
+function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeInput, onChangeLoginInputImage }) {
     const [isShow, setIsShow] = React.useState(false)
+    const [isShowC, setIsShowC] = React.useState(false)
+    const [mouse, setMouse] = React.useState(false)
+
+    const AntSwitch = withStyles((theme) => ({
+        root: {
+            width: 28,
+            height: 16,
+            padding: 0,
+            display: 'flex'
+        },
+        switchBase: {
+            padding: 2,
+            color: theme.palette.grey[500],
+            '&$checked': {
+                transform: 'translateX(12px)',
+                color: theme.palette.common.white,
+                '& + $track': {
+                    opacity: 1,
+                    backgroundColor: theme.palette.primary.main,
+                    borderColor: theme.palette.primary.main
+                }
+            }
+        },
+        thumb: {
+            width: 12,
+            height: 12,
+            boxShadow: 'none'
+        },
+        track: {
+            border: `1px solid ${theme.palette.grey[500]}`,
+            borderRadius: 16 / 2,
+            opacity: 1,
+            backgroundColor: theme.palette.common.white
+        },
+        checked: {}
+    }))(Switch)
 
     return (
         <div className='Formulaire'>
-            <div>
-                <div>
-                    <TextField
-                        label="Nom"
-                        value={state.nomMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="nomMembres"
-                    />
-                    {' '}
-                    <TextField
-                        label="Prenom"
-                        value={state.prenomMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="prenomMembres"
-                    />
-                </div>
-                <div>
-                    <TextField
-                        label="email"
-                        value={state.emailMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="emailMembres"
-                        type='email'
-                    />
-                    <FormControl variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={isShow ? 'text' : 'password'}
-                            value={state.passwordUser}
-                            onChange={onChangeInput}
-                            name='passwordMembres'
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={() => setIsShow(!isShow)}
-                                        onMouseDown={() => setIsShow(!isShow)}
-                                        edge="end"
-                                    >
-                                        {isShow ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            labelWidth={70}
-                        />
-                    </FormControl>
-                </div>
-                <div style={{ width: 200 }}>
+            <h1>Nouveau membre</h1>
+            <div className='flex'>
+                <div
+                    style={{ width: 200, height: 200 }}
+                    onMouseEnter={() => setMouse(true)}
+                    onMouseLeave={() => setMouse(false)}
+                >
                     <Dropzone onDrop={ (e) => { onChangeLoginInputImage(e) } }>
                         {({ getRootProps, getInputProps }) => (
                             <section>
@@ -101,59 +83,138 @@ function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginIn
                                             {
                                                 state.imgUser
                                                     ? <img src={state.imgUser} alt='image_import'/>
-                                                    : <Image style={{ fontSize: 64 }}/>
+                                                    : <img src={ prefix + './anon.png' } alt='icon_default'/>
                                             }
                                         </div>
-                                        edit profile
+                                        { mouse && <p>edit profile</p> }
                                     </div>
                                 </div>
                             </section>
                         )}
                     </Dropzone>
                 </div>
-                <div
-                    style={{
-                        marginTop: 16,
-                        marginBottom: 8
-                    }}
-                >
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Admin</FormLabel>
-                        <RadioGroup
-                            aria-label="isAdmin"
+                <div className='right'>
+                    <div>
+                        <p>A propos membre</p>
+                        <input
+                            placeholder="Nom"
+                            value={state.nomMembres}
+                            onChange={onChangeInput}
+                            margin="normal"
+                            variant="outlined"
+                            name="nomMembres"
+                        />
+                        <input
+                            placeholder="Prenom"
+                            value={state.prenomMembres}
+                            onChange={onChangeInput}
+                            margin="normal"
+                            variant="outlined"
+                            name="prenomMembres"
+                        />
+                    </div>
+                    <div>
+                        <p>A propos membre</p>
+                        <input
+                            placeholder="email"
+                            value={state.emailMembres}
+                            onChange={onChangeInput}
+                            margin="normal"
+                            variant="outlined"
+                            name="emailMembres"
+                            type='email'
+                        />
+                        <div className='passwordFlex'>
+                            <div>
+                                <input
+                                    type={isShow ? 'text' : 'password'}
+                                    value={state.passwordMembres}
+                                    onChange={onChangeInput}
+                                    name='passwordMembres'
+                                    style={{ width: 167 }}
+                                    placeholder='Mot de passe'
+                                />
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setIsShow(!isShow)}
+                                        onMouseDown={() => setIsShow(!isShow)}
+                                        edge="end"
+                                    >
+                                        {isShow ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            </div>
+                            <div
+                                style={{
+                                    margin: '0 10px',
+                                    backgroundColor: 'white',
+                                    width: 0
+                                }}
+                            ></div>
+                            <div>
+                                <input
+                                    type={isShowC ? 'text' : 'password'}
+                                    value={state.passwordCMembres}
+                                    onChange={onChangeInput}
+                                    name='passwordCMembres'
+                                    style={{ width: 167 }}
+                                    placeholder='Verification mot de passe'
+                                />
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setIsShowC(!isShow)}
+                                        onMouseDown={() => setIsShowC(!isShow)}
+                                        edge="end"
+                                    >
+                                        {isShow ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style={{
+                            marginTop: 16,
+                            marginBottom: 8,
+                            display: 'flex'
+                        }}
+                    >
+                        <p>Administration</p>
+                        {' '}
+                        <AntSwitch
+                            checked={state.isAdmin ? state.isAdmin === 'y' : false}
+                            onChange={handleChangeSwitch}
                             name="isAdmin"
-                            value={state.isAdmin}
-                            // onChange={onChangeInput}
-                            row
+                            className='checkboxIsAdmin'
+                        />
+                    </div>
+                    <div className='btnEnregistrer'>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => setIsAdd(false)}
+                            className='btnDelete'
                         >
-                            <FormControlLabel value="y" control={<Radio />} label="Oui" />
-                            <FormControlLabel value="n" control={<Radio />} label="Non" />
-                        </RadioGroup>
-                    </FormControl>
-                </div>
-            </div>
-            <div>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setIsAdd(false)}
-                    className='btnDelete'
-                >
-                Anuller
-                </Button>
-                {' '}
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => {
-                        setIsAdd(true)
-                        onSubmit()
-                    }}
-                    className='btnDelete'
-                >
-                    Enregistrer
-                </Button>
+                            Anuller
+                        </Button>
+                        {' '}
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => {
+                                setIsAdd(true)
+                                onSubmit()
+                            }}
+                            className='btnDelete'
+                        >
+                            Enregistrer
+                        </Button>
 
+                    </div>
+
+                </div>
             </div>
         </div>
     )
@@ -205,12 +266,20 @@ function Membres (props) {
         imgMembres: '',
         nomMembres: '',
         prenomMembres: '',
+        passwordMembres: '',
+        passwordCMembres: '',
         emailMembres: '',
         isAdmin: 'n'
     })
 
     const [isEdit, setIsEdit] = useState(false)
     const dispatch = useDispatch()
+
+    const handleChangeSwitch = (e) => {
+        const stock = Object.assign({}, state, { isAdmin: e.target.checked ? 'y' : 'n' })
+        setState(stock)
+    }
+
     const datas = [
         {
             imgMembres: '',
@@ -345,9 +414,13 @@ function Membres (props) {
                     onSubmit={onSubmit}
                     onChangeInput={onChangeInput}
                     onChangeLoginInputImage={onChangeLoginInputImage}
+                    handleChangeSwitch={handleChangeSwitch}
                 />
                 : <div className='Table'>
                     <div className='addButton'>
+                        <p>
+                            Liste des membres actuels
+                        </p>
                         <Button
                             variant="contained"
                             color="primary"

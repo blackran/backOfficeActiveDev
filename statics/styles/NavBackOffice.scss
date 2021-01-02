@@ -1,8 +1,11 @@
 .NavBackOffice {
     background: #2B2829;
-    width: 250px;
+    width: 300px;
     height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .Header {
         background: #2B2829;
         height: 150px;
@@ -10,15 +13,58 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        &>img {
-            height: 80px;
-        }
+        // &>img {
+        //     height: 80px;
+        // }
         h1 {
-            font-size: 1.5em;
+            font-size: 18px;
+            line-height: 21px;
+            color: #FFFFFF;
         }
     }
-    .Deconnexion {
-        position: absolute;
-        bottom: 10px;
+    .listNav {
+        height: 459px;
+        left: 34px;
+        top: 195px;
+
+        /* white */
+
+        background: #FFFFFF;
+        /* normal shadow */
+
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        padding: 20px;
+        .item {
+            width: 220px;
+            display: flex;
+            align-items: center;
+            margin-top: 7px;
+            padding: 10px 20px;
+            cursor: pointer;
+            p {
+                margin: 0px 0px 0px 5px;
+            }
+        }
+        .active {
+            background: #E8003A;
+            border-radius: 100px;
+            color: white;
+        }
+
+        .colapseActive {
+            background: #FFFFFF;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.13);
+            border-radius: 0px 0px 10px 10px;
+        }
+
+        .colapse-child {
+            display: flex;
+            flex-direction: column;
+        }
+        .Deconnexion {
+            position: absolute;
+            bottom: 35px;
+        }
     }
 }
