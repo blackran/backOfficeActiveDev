@@ -456,36 +456,6 @@ function Membres (props) {
         }
     }, [dispatch])
 
-    useEffect(() => {
-        const smallFunction = async () => {
-            // setIsModif(false)
-            if (props.id) {
-                // const user = await findOneUser(props.id)
-                // if (user) {
-                //     setState({
-                //         idUser: user.idUser,
-                //         lastNameUser: user.lastNameUser,
-                //         firstNameUser: user.firstNameUser,
-                //         imgUser: user.imgUser,
-                //         passwordUser: '',
-                //         emailUser: user.emailUser,
-                //         isAdmin: user.isAdmin
-                //     })
-                //     setIsModif(true)
-                // }
-                setState({
-                    imgMembres: '',
-                    idMembres: 2,
-                    nomMembres: 'RASOLONDRAIBE',
-                    prenomMembres: 'Andrianantenaina',
-                    emailMembres: 'Nante@Gmail.com',
-                    isAdmin: 'n'
-                })
-            }
-        }
-        smallFunction()
-    }, [isEdit])
-
     const onDelete = async (idMembres) => {
         // const data = await deleteUser(idMembres)
         // if (data) {
@@ -523,37 +493,39 @@ function Membres (props) {
     }
 
     const onSubmit = async (e) => {
-        if (isAdd) {
-            dispatch({ type: 'ADD_MEMBRES', datas: state })
-        } else {
-            dispatch({ type: 'PUT_MEMBRES', datas: state })
-        }
-        // if (isAdd) {
-        //     resp = await addUser(state)
-        // } else {
-        //     resp = await putUser(state)
-        // }
-        // if (resp) {
-        //     const data = await findOneUser(jwt(resp).idUser)
-        //     // console.log(jwt(resp).idUser, data)
-        //     if (isModif) {
-        //         dispatch({ type: 'PUT_USER', data })
-        //     } else {
-        //         dispatch({ type: 'ADD_USER', data })
-        //     }
-        //     localStorage.setItem('Token', resp)
-        //     setState({
-        //         lastNameUser: '',
-        //         firstNameUser: '',
-        //         imgUser: '',
-        //         passwordUser: '',
-        //         emailUser: '',
-        //         isAdmin: 'n'
-        //     })
-        //     setIsModif(false)
-        // }
+        if (state.passwordMembres === state.passwordCMembres) {
+            if (isAdd) {
+                dispatch({ type: 'ADD_MEMBRES', datas: state })
+            } else {
+                dispatch({ type: 'PUT_MEMBRES', datas: state })
+            }
+            // if (isAdd) {
+            //     resp = await addUser(state)
+            // } else {
+            //     resp = await putUser(state)
+            // }
+            // if (resp) {
+            //     const data = await findOneUser(jwt(resp).idUser)
+            //     // console.log(jwt(resp).idUser, data)
+            //     if (isModif) {
+            //         dispatch({ type: 'PUT_USER', data })
+            //     } else {
+            //         dispatch({ type: 'ADD_USER', data })
+            //     }
+            //     localStorage.setItem('Token', resp)
+            //     setState({
+            //         lastNameUser: '',
+            //         firstNameUser: '',
+            //         imgUser: '',
+            //         passwordUser: '',
+            //         emailUser: '',
+            //         isAdmin: 'n'
+            //     })
+            //     setIsModif(false)
+            // }
 
-        setIsEdit(false)
+            setIsEdit(false)
+        }
     }
 
     const setModeIsAdd = () => {

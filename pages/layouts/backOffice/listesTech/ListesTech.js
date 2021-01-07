@@ -33,6 +33,7 @@ function Formulaire ({ state, setIsAdd, onSubmit, onChangeInputSelect, handleCha
             borderRadius: 4,
             position: 'relative',
             backgroundColor: '#EDEDED',
+            marginLeft: 10,
             border: 'none',
             fontSize: 16,
             padding: '10px 26px 10px 12px',
@@ -133,7 +134,6 @@ function Formulaire ({ state, setIsAdd, onSubmit, onChangeInputSelect, handleCha
                         <p style={{ marginBottom: 0 }}>Type</p>
                         {' '}
                         <FormControl>
-                            {/* <InputLabel id="demo-customized-select-label">Age</InputLabel> */}
                             <Select
                                 labelId="demo-customized-select-label"
                                 id="demo-customized-select"
@@ -142,9 +142,6 @@ function Formulaire ({ state, setIsAdd, onSubmit, onChangeInputSelect, handleCha
                                 input={<BootstrapInput />}
                                 name='typeTechnologies'
                             >
-                                <MenuItem value="">
-                                    <em>Rien</em>
-                                </MenuItem>
                                 {
                                     typeTech && typeTech.map(({ idTypeTechno, nameTypeTechno }) => {
                                         return <MenuItem key={idTypeTechno} value={ idTypeTechno }>
@@ -240,10 +237,9 @@ function ListesTech (props) {
     useEffect(() => {
         if (typeTech.lenght !== 0) {
             const stock = Object.assign({}, state, { typeTechnologies: typeTech[0] })
-            console.log({ stock })
-            // setState(stock)
+            setState(stock)
         }
-    }, [typeTech, state])
+    }, [])
 
     // useEffect(() => {
     //     if (datas) {
