@@ -22,14 +22,14 @@ module.exports = {
     assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH
 }
 
-module.exports = {
-    async redirects () {
-        return [
-            {
-                source: '/',
-                destination: '/Login',
-                permanent: true
-            }
-        ]
-    }
-}
+// module.exports = {
+//     async redirects () {
+//         return [
+//             {
+//                 source: '/',
+//                 destination: '/Login',
+//                 permanent: true
+//             }
+//         ]
+//     }
+// }
