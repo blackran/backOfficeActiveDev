@@ -42,7 +42,9 @@ function BackOffice (props) {
             </div>
             <div className='Right'>
                 <NavTopBackOffice/>
-                <Body />
+                <div className='bodyOffice'>
+                    <Body />
+                </div>
             </div>
         </div>
     )

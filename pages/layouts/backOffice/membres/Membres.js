@@ -4,7 +4,6 @@ import {
     Create,
     Visibility,
     VisibilityOff,
-    Image,
     Add
 } from '@material-ui/icons'
 import {
@@ -17,15 +16,131 @@ import { useSpring, animated } from 'react-spring'
 import { withStyles } from '@material-ui/core/styles'
 import Dropzone from 'react-dropzone'
 
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Dialog from '@material-ui/core/Dialog'
 import { useSelector, useDispatch } from 'react-redux'
-// import {
-//     getAllUser,
-//     deleteUser
-// } from './utils/Utils'
+
+import {
+    filterIsExist
+} from '../../../utils/Utils'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeInput, onChangeLoginInputImage }) {
+function DialogSelect ({ datas, onSubmitDialog, idMembres }) {
+    const [choise, setChoise] = useState([])
+    const [open, setOpen] = React.useState(false)
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const clickOne = (idTechnologies) => {
+        const isExist = choise.filter(e => {
+            return e.idTechnologies === idTechnologies
+        }).length !== 0
+        let newdatas = []
+        if (isExist) {
+            newdatas = choise.filter(e => e.idTechnologies !== idTechnologies)
+        } else {
+            const stock = datas.filter(e => e.idTechnologies === idTechnologies)
+            newdatas = [...choise, ...stock]
+        }
+        setChoise(newdatas)
+    }
+
+    const onSubmit = () => {
+        onSubmitDialog(choise)
+        handleClose()
+        setChoise([])
+    }
+
+    return (
+        <>
+            {/* eslint-disable-next-line */}
+            <div className='shadow-1' onClick={handleClickOpen}>
+                <Add/>
+            </div>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Fill the form</DialogTitle>
+                <DialogContent>
+                    <div className='dialogProjects'>
+                        {
+                            datas && datas.map(({ idTechnologies, imgTechnologies }) => {
+                                const isExist = choise.filter(e => {
+                                    return e.idTechnologies === idTechnologies
+                                }).length !== 0
+                                // eslint-disable-next-line
+                                return <div key={idTechnologies} className={ isExist?'shadow-3': 'shadow-1' } onClick={() => clickOne(idTechnologies) } >
+                                    <img src={ imgTechnologies || prefix + '/default.png' } alt='logo_technologie'/>
+                                </div>
+                            })
+                        }
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={onSubmit}
+                        color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    )
+}
+
+function OneBlock ({ idTechnologies, imgTechnologies, deleteTech }) {
+    const [isHoverTech, setIsHoverTech] = useState(false)
+    return <div
+        className='shadow-1'
+        onMouseEnter={() => setIsHoverTech(true)}
+        onMouseLeave={() => setIsHoverTech(false)}
+    >
+        {
+            isHoverTech
+                ? <Delete
+                    onClick={() => deleteTech(idTechnologies)}
+                />
+                : <img src={ imgTechnologies || prefix + '/default.png' } alt='logo_technologie'/>
+        }
+    </div>
+}
+
+function Tech ({ data, alldata, idMembres, onSubmitDialog, deleteTech }) {
+    return (
+        <div className='technologies'>
+            {
+                data && data.map(({ idTechnologies, imgTechnologies }) => {
+                    return <OneBlock
+                        key={idTechnologies}
+                        deleteTech={deleteTech}
+                        idTechnologies={idTechnologies}
+                        imgTechnologies={imgTechnologies}
+                    />
+                })
+            }
+            {
+                <DialogSelect
+                    datas={filterIsExist(alldata, data)}
+                    idMembres={idMembres}
+                    onSubmitDialog={onSubmitDialog}
+                />
+            }
+        </div>
+    )
+}
+
+function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeInput, onChangeLoginInputImage, onSubmitDialog, deleteTech }) {
+    const tech = useSelector(state => state.tech.datas)
     const [isShow, setIsShow] = React.useState(false)
     const [isShowC, setIsShowC] = React.useState(false)
     const [mouse, setMouse] = React.useState(false)
@@ -190,6 +305,24 @@ function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeIn
                             className='checkboxIsAdmin'
                         />
                     </div>
+                    <div
+                        style={{
+                            marginTop: 16,
+                            marginBottom: 20,
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <p style={{ margin: 0 }}>Technologies</p>
+                        {' '}
+                        <Tech
+                            data={state.technologies}
+                            alldata={tech}
+                            idMembres={state.idMembres}
+                            onSubmitDialog={onSubmitDialog}
+                            deleteTech={deleteTech}
+                        />
+                    </div>
                     <div className='btnEnregistrer'>
                         <Button
                             variant="contained"
@@ -220,40 +353,42 @@ function Formulaire ({ state, setIsAdd, onSubmit, handleChangeSwitch, onChangeIn
     )
 }
 
-function Column ({ data, onDeleteUser, onModifierUser, i }) {
-    const { idMembres, nomMembres, prenomMembres, emailMembres, imgMembres, isAdmin } = data
-    const [style, animate] = useSpring(() => ({ transform: 'translateY(100px)', opacity: 0 }))
+function Column ({ data, onDelete, onModifier, i, toggleAdmin }) {
+    const {
+        idMembres, nomMembres, prenomMembres, emailMembres,
+        // imgMembres ,
+        isAdmin
+    } = data
+    const [style, animate] = useSpring(() => ({ transform: 'translateX(' + 1000 * (i + 1) + 'px)', opacity: 0 }))
     useEffect(() => {
-        setTimeout(() =>
-            animate({ transform: 'translateY(0px)', opacity: 1 })
-        , (i + 1 * 1000))
+        animate({ transform: 'translateX(0px)', opacity: 1 })
     }, [animate, i])
-    return (<animated.tr key={idMembres} style={style}>
+    return (<animated.tr style={style}>
         <td><img src={ prefix + '/me.jpg' } alt='image_user' className='image_user'/></td>
         <td>{nomMembres}</td>
         <td>{prenomMembres}</td>
         <td className='email'>{emailMembres}</td>
         <td className='action'>
             <button
-                onClick={() => onDeleteUser(idMembres)}
+                onClick={() => onDelete(idMembres)}
             >
                 <Delete/>
             </button>
             <p> </p>
             <button
-                onClick={() => onModifierUser(imgMembres)}
+                onClick={() => onModifier(idMembres)}
             >
                 <Create/>
             </button>
         </td>
         <td className='admin'>
-            <button onClick={() => onDeleteUser(imgMembres)}>
+            <button onClick={() => toggleAdmin(idMembres)}>
                 <p
                     style={{
                         backgroundColor: isAdmin === 'y' ? 'green' : 'red'
                     }}
                 ></p>
-                {isAdmin === 'y' ? 'active' : 'desactive'}
+                {isAdmin === 'y' ? 'desactive' : 'active'}
             </button>
         </td>
     </animated.tr>)
@@ -269,10 +404,14 @@ function Membres (props) {
         passwordMembres: '',
         passwordCMembres: '',
         emailMembres: '',
-        isAdmin: 'n'
+        isAdmin: 'n',
+        technologies: []
     })
 
+    // default value false
     const [isEdit, setIsEdit] = useState(false)
+
+    const [isAdd, setIsAdd] = useState(true)
     const dispatch = useDispatch()
 
     const handleChangeSwitch = (e) => {
@@ -282,22 +421,35 @@ function Membres (props) {
 
     const datas = [
         {
-            imgMembres: '',
             idMembres: 1,
+            imgMembres: '',
             nomMembres: 'RASOLONDRAIBE',
             prenomMembres: 'Andrianantenaina',
             emailMembres: 'Nante@Gmail.com',
-            isAdmin: 'y'
+            isAdmin: 'y',
+            technologies: []
         },
         {
-            imgMembres: '',
             idMembres: 2,
+            imgMembres: '',
             nomMembres: 'RASOLONDRAIBE',
             prenomMembres: 'Andrianantenaina',
             emailMembres: 'Nante@Gmail.com',
-            isAdmin: 'n'
+            isAdmin: 'n',
+            technologies: []
         }
     ]
+
+    const onSubmitDialog = (e) => {
+        const stock = Object.assign({}, state, { technologies: [...state.technologies, ...e] })
+        setState(stock)
+    }
+
+    const deleteTech = (id) => {
+        const stock = Object.assign({}, state, { technologies: state.technologies.filter(e => e.idTechnologies !== id) })
+        setState(stock)
+    }
+
     useEffect(() => {
         if (datas) {
             dispatch({ type: 'INIT_MEMBRES', datas })
@@ -334,20 +486,27 @@ function Membres (props) {
         smallFunction()
     }, [isEdit])
 
-    const onDeleteUser = async (idMembres) => {
+    const onDelete = async (idMembres) => {
         // const data = await deleteUser(idMembres)
-        console.log('onDeleteUser')
         // if (data) {
         dispatch({ type: 'DELETE_MEMBRES', datas: { idMembres } })
         // }
     }
 
-    // const onModifierUser = (idUser) => {
-    //     console.log('onModifierUser')
-    //     router.push('/Signin?id=' + idUser)
-    // }
+    const onModifier = (idMembres) => {
+        setIsAdd(false)
+        const stock = membres.find(e => e.idMembres === idMembres)
+        const newstate = Object.assign({}, state, stock)
+        setState(newstate)
+        setIsEdit(true)
+    }
 
-    //  onModifierUser={onModifierUser}
+    const toggleAdmin = (idMembres) => {
+        setIsAdd(false)
+        const stock = membres.find(e => e.idMembres === idMembres)
+        const dat = Object.assign({}, stock, { isAdmin: stock.isAdmin === 'y' ? 'n' : 'y' })
+        dispatch({ type: 'PUT_MEMBRES', datas: dat })
+    }
 
     const onChangeInput = (e) => {
         setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
@@ -364,11 +523,15 @@ function Membres (props) {
     }
 
     const onSubmit = async (e) => {
-        // let resp
-        // if (isModif) {
-        //     resp = await putUser(state)
-        // } else {
+        if (isAdd) {
+            dispatch({ type: 'ADD_MEMBRES', datas: state })
+        } else {
+            dispatch({ type: 'PUT_MEMBRES', datas: state })
+        }
+        // if (isAdd) {
         //     resp = await addUser(state)
+        // } else {
+        //     resp = await putUser(state)
         // }
         // if (resp) {
         //     const data = await findOneUser(jwt(resp).idUser)
@@ -393,7 +556,7 @@ function Membres (props) {
         setIsEdit(false)
     }
 
-    const setIsAdd = () => {
+    const setModeIsAdd = () => {
         setState({
             idMembres: 0,
             imgMembres: '',
@@ -410,11 +573,13 @@ function Membres (props) {
             { isEdit
                 ? <Formulaire
                     state={state}
-                    setIsAdd={setIsAdd}
+                    setIsAdd={setModeIsAdd}
                     onSubmit={onSubmit}
                     onChangeInput={onChangeInput}
                     onChangeLoginInputImage={onChangeLoginInputImage}
                     handleChangeSwitch={handleChangeSwitch}
+                    onSubmitDialog={onSubmitDialog}
+                    deleteTech={deleteTech}
                 />
                 : <div className='Table'>
                     <div className='addButton'>
@@ -446,10 +611,12 @@ function Membres (props) {
                             {
                                 membres && membres.map((e, i) => {
                                     return (<Column
-                                        key={e.idMembres}
+                                        key={e.idMembres || i}
                                         data={e}
                                         i={i}
-                                        onDeleteUser={onDeleteUser}
+                                        onModifier={onModifier}
+                                        onDelete={onDelete}
+                                        toggleAdmin={toggleAdmin}
                                     />)
                                 })
                             }

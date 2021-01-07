@@ -1,4 +1,4 @@
-.Membres {
+.ListesTech {
     .Formulaire {
         display: flex;
         flex-direction: column;
@@ -39,6 +39,14 @@
                         flex-grow: 0;
                         margin-bottom: 10px;
                         padding-left: 10px;
+                    }
+                    select {
+                        margin-left: 10px;
+                        height: 38px;
+                        background: #EDEDED;
+                        border-radius: 10px;
+                        border: none;
+                        padding: 5px;
                     }
                     .passwordFlex {
                         display: flex;

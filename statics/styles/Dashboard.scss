@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    height: calc(100vh - 90px);
     .BlockDashboard {
         width: 50%;
         display: flex;
@@ -10,21 +11,40 @@
         justify-content: center;
         padding: 10px;
         &>div {
+            // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
             width: 250px;
+            height: 200px;
             display: flex;
-            background-color: #ecf5ed;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
             border-radius: 10px;
-            img {
-                width: 80px;
-                height: 80px;
+            position: relative;
+            &>div {
+                border-radius: 50%;
+                background-color: #e8003a;
+                padding: 10px;
+                color: white;
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                img {
+                    width: 80px;
+                    height: 80px;
+                }
             }
             h1 {
-                font-size: 1.2rem;
                 margin: 0.5rem 0 0 0;
+                &:nth-child(2) {
+                    font-size: 2.0rem;
+                    color: #000000c9;
+                    font-weight: bold;
+                }
+                &:nth-child(3) {
+                    font-size: 1.0rem;
+                    color: #00000091;
+                }
             }
         }
     }

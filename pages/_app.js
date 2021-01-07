@@ -17,6 +17,8 @@ import '../statics/styles/NavBackOffice.scss'
 import '../statics/styles/NavTopBackOffice.scss'
 import '../statics/styles/Membres.scss'
 import '../statics/styles/Projects.scss'
+import '../statics/styles/TypesTech.scss'
+import '../statics/styles/ListesTech.scss'
 
 // import 'jodit'
 // import 'jodit/build/jodit.min.css'

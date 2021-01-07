@@ -28,6 +28,28 @@ export const login = async (data) => {
     return response
 }
 
+export const filterIsExist = (dataAll, dataExist) => {
+    let stock = []
+    for (let i = 0; i < dataAll.length; i++) {
+        let first = true
+        for (let h = 0; h < dataExist.length; h++) {
+            console.log(JSON.stringify(dataAll[i]) === JSON.stringify(dataExist[h]))
+            if (JSON.stringify(dataAll[i]) === JSON.stringify(dataExist[h])) {
+                first = false
+            }
+        }
+        if (first) {
+            stock.push(dataAll[i])
+        }
+    }
+
+    if (dataExist.length === 0) {
+        stock = dataAll
+    }
+
+    return stock
+}
+
 export const addMembres = async (data) => {
     let response
     const query = 'mutation { addUser(firstNameUser: "' + data.firstNameUser +

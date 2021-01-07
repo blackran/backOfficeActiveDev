@@ -1,286 +1,175 @@
 import React, { useEffect, useState } from 'react'
 import {
+    Add,
     Delete,
     Create,
-    Visibility,
-    VisibilityOff,
-    Image,
-    Add
+    Clear,
+    Done
 } from '@material-ui/icons'
 import {
-    TextField,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    InputAdornment,
-    IconButton,
-    FormLabel,
-    Radio,
-    Button,
-    RadioGroup,
-    FormControlLabel
+    Button
 } from '@material-ui/core'
 import { useSpring, animated } from 'react-spring'
 import Dropzone from 'react-dropzone'
 
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Dialog from '@material-ui/core/Dialog'
+
 import { useSelector, useDispatch } from 'react-redux'
-// import {
-//     getAllUser,
-//     deleteUser
-// } from './utils/Utils'
+import {
+    filterIsExist
+} from '../../../utils/Utils'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-function Formulaire ({ state, setIsAdd, onSubmit, onChangeInput, onChangeLoginInputImage }) {
-    const [isShow, setIsShow] = React.useState(false)
+function DialogSelect ({ datas, onSubmitDialog, idProjets }) {
+    const [choise, setChoise] = useState([])
+    const [open, setOpen] = React.useState(false)
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const clickOne = (idTechnologies) => {
+        const isExist = choise.filter(e => {
+            return e.idTechnologies === idTechnologies
+        }).length !== 0
+        let newdatas = []
+        if (isExist) {
+            newdatas = choise.filter(e => e.idTechnologies !== idTechnologies)
+        } else {
+            const stock = datas.filter(e => e.idTechnologies === idTechnologies)
+            newdatas = [...choise, ...stock]
+        }
+        setChoise(newdatas)
+    }
+
+    const onSubmit = () => {
+        onSubmitDialog(choise)
+        handleClose()
+        setChoise([])
+    }
 
     return (
-        <div className='Formulaire'>
-            <div>
-                <div>
-                    <TextField
-                        label="Nom"
-                        value={state.nomMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="nomMembres"
-                    />
-                    {' '}
-                    <TextField
-                        label="Prenom"
-                        value={state.prenomMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="prenomMembres"
-                    />
-                </div>
-                <div>
-                    <TextField
-                        label="email"
-                        value={state.emailMembres}
-                        onChange={onChangeInput}
-                        margin="normal"
-                        variant="outlined"
-                        name="emailMembres"
-                        type='email'
-                    />
-                    <FormControl variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={isShow ? 'text' : 'password'}
-                            value={state.passwordUser}
-                            onChange={onChangeInput}
-                            name='passwordMembres'
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={() => setIsShow(!isShow)}
-                                        onMouseDown={() => setIsShow(!isShow)}
-                                        edge="end"
-                                    >
-                                        {isShow ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            labelWidth={70}
-                        />
-                    </FormControl>
-                </div>
-                <div style={{ width: 200 }}>
-                    <Dropzone onDrop={ (e) => { onChangeLoginInputImage(e) } }>
-                        {({ getRootProps, getInputProps }) => (
-                            <section>
-                                <div {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    <div className='changeImage' >
-                                        <div>
-                                            {
-                                                state.imgUser
-                                                    ? <img src={state.imgUser} alt='image_import'/>
-                                                    : <Image style={{ fontSize: 64 }}/>
-                                            }
-                                        </div>
-                                        edit profile
-                                    </div>
+        <>
+            {/* eslint-disable-next-line */}
+            <div className='shadow-1' onClick={handleClickOpen}>
+                <Add/>
+            </div>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Fill the form</DialogTitle>
+                <DialogContent>
+                    <div className='dialogProjects'>
+                        {
+                            datas && datas.map(({ idTechnologies, imgTechnologies }) => {
+                                const isExist = choise.filter(e => {
+                                    return e.idTechnologies === idTechnologies
+                                }).length !== 0
+                                // eslint-disable-next-line
+                                return <div 
+                                    key={idTechnologies}
+                                    className={ isExist ? 'shadow-3' : 'shadow-1' }
+                                    onClick={() => clickOne(idTechnologies) }
+                                >
+                                    <img
+                                        src={ imgTechnologies || prefix + '/default.png' }
+                                        alt='logo_technologie'
+                                    />
                                 </div>
-                            </section>
-                        )}
-                    </Dropzone>
-                </div>
-                <div
-                    style={{
-                        marginTop: 16,
-                        marginBottom: 8
-                    }}
-                >
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Admin</FormLabel>
-                        <RadioGroup
-                            aria-label="isAdmin"
-                            name="isAdmin"
-                            value={state.isAdmin}
-                            // onChange={onChangeInput}
-                            row
-                        >
-                            <FormControlLabel value="y" control={<Radio />} label="Oui" />
-                            <FormControlLabel value="n" control={<Radio />} label="Non" />
-                        </RadioGroup>
-                    </FormControl>
-                </div>
-            </div>
-            <div>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setIsAdd(false)}
-                    className='btnDelete'
-                >
-                Anuller
-                </Button>
-                {' '}
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => {
-                        setIsAdd(true)
-                        onSubmit()
-                    }}
-                    className='btnDelete'
-                >
-                    Enregistrer
-                </Button>
+                            })
+                        }
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={onSubmit}
+                        color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    )
+}
 
-            </div>
+function OneBlock ({ idTechnologies, isEdit, imgTechnologies, deleteTech }) {
+    const [isHoverTech, setIsHoverTech] = useState(false)
+    return <div
+        key={idTechnologies}
+        className='shadow-1'
+        onMouseEnter={() => setIsHoverTech(true)}
+        onMouseLeave={() => setIsHoverTech(false)}
+    >
+        {
+            isHoverTech && isEdit
+                ? <Delete
+                    onClick={() => deleteTech(idTechnologies)}
+                />
+                : <img
+                    src={ imgTechnologies || prefix + '/default.png' }
+                    alt='logo_technologie'
+                />
+        }
+    </div>
+}
+
+function Tech ({ data, alldata, isEdit, onSubmitDialog, deleteTech, idProjets }) {
+    return (
+        <div className='technologies'>
+            {
+                data && data.map(({ idTechnologies, imgTechnologies }) => {
+                    return <OneBlock
+                        deleteTech={deleteTech}
+                        idTechnologies={idTechnologies}
+                        imgTechnologies={imgTechnologies}
+                        isEdit={isEdit}
+                    />
+                })
+            }
+            {
+                isEdit &&
+                <DialogSelect
+                    datas={filterIsExist(alldata, data)}
+                    idProjets={idProjets}
+                    onSubmitDialog={onSubmitDialog}
+                />
+            }
         </div>
     )
 }
 
-function Column ({ data, onDeleteUser, onModifierUser, i }) {
-    const { idProjets, titleProjets, emailMembres, isAdmin } = data
-    const [style, animate] = useSpring(() => ({ transform: 'translateY(100px)', opacity: 0 }))
-    useEffect(() => {
-        setTimeout(() =>
-            animate({ transform: 'translateY(0px)', opacity: 1 })
-        , (i + 1 * 1000))
-    }, [animate, i])
-    return (<animated.div key={idProjets} style={style}>
-        <div className='blockProjects'>
-            <img src={ prefix + '/me.jpg' } alt='image_user' className='image_user'/>
-            {}
-            <div>{titleProjets}</div>
-            <div className='email'>{emailMembres}</div>
-            <div className='action'>
-                <button
-                    onClick={() => onDeleteUser(idProjets)}
-                >
-                    <Delete/>
-                </button>
-                <p> </p>
-                <button
-                    onClick={() => onModifierUser(idProjets)}
-                >
-                    <Create/>
-                </button>
-            </div>
-            <div className='admin'>
-                <button onClick={() => onDeleteUser(idProjets)}>
-                    <p
-                        style={{
-                            backgroundColor: isAdmin === 'y' ? 'green' : 'red'
-                        }}
-                    ></p>
-                    {isAdmin === 'y' ? 'active' : 'desactive'}
-                </button>
-            </div>
-        </div>
-    </animated.div>)
-}
-
-function Projects (props) {
-    const membres = useSelector(state => state.membres.datas)
+function BlockProjects ({ data, onDeleteUser, onModifierUser, i, IsAdd, setIsAdd }) {
+    const dispatch = useDispatch()
+    const tech = useSelector(state => state.tech.datas)
+    const [edit, setEdit] = useState(false)
+    const [mouse, setMouse] = useState(false)
+    const [style, animate] = useSpring(() => ({ transform: 'translateX(' + 100 * (i + 1) + 'px)', opacity: 0 }))
     const [state, setState] = React.useState({
         idProjets: 0,
         imgProjets: '',
         titleProjets: '',
-        contetProjects: '',
+        contetProjets: '',
         updateAt: '',
-        aimeProjets: 0
+        aimeProjets: 0,
+        technologies: []
     })
-
-    const [isEdit, setIsEdit] = useState(false)
-    const dispatch = useDispatch()
-    const datas = [
-        {
-            idProjets: 1,
-            imgProjets: '',
-            titleProjets: 'SITE DE VENTE ORDINATEURS',
-            contetProjects: 'lorem upsome',
-            updateAt: '22/04/2002',
-            aimeProjets: 2
-        },
-        {
-            idProjets: 2,
-            imgProjets: '',
-            titleProjets: 'SITE DE VENTE ORDINATEURS',
-            contetProjects: 'lorem upsome',
-            updateAt: '22/04/2002',
-            aimeProjets: 3
-        }
-    ]
-    useEffect(() => {
-        if (datas) {
-            dispatch({ type: 'INIT_PROJECTS', datas })
-        }
-    }, [dispatch])
+    const { idProjets, titleProjets, contetProjets, technologies } = state
 
     useEffect(() => {
-        const smallFunction = async () => {
-            // setIsModif(false)
-            if (props.id) {
-                // const user = await findOneUser(props.id)
-                // if (user) {
-                //     setState({
-                //         idUser: user.idUser,
-                //         lastNameUser: user.lastNameUser,
-                //         firstNameUser: user.firstNameUser,
-                //         imgUser: user.imgUser,
-                //         passwordUser: '',
-                //         emailUser: user.emailUser,
-                //         isAdmin: user.isAdmin
-                //     })
-                //     setIsModif(true)
-                // }
-                setState({
-                    idProjets: 1,
-                    imgProjets: '',
-                    titleProjets: 'SITE DE VENTE ORDINATEURS',
-                    contetProjects: 'lorem upsome',
-                    updateAt: '22/04/2002',
-                    aimeProjets: 2
-                })
-            }
+        if (IsAdd) {
+            setEdit(true)
         }
-        smallFunction()
-    }, [isEdit])
-
-    const onDeleteUser = async (idMembres) => {
-        // const data = await deleteUser(idMembres)
-        console.log('onDeleteUser')
-        // if (data) {
-        dispatch({ type: 'DELETE_PROJECTS', datas: { idMembres } })
-        // }
-    }
-
-    // const onModifierUser = (idUser) => {
-    //     console.log('onModifierUser')
-    //     router.push('/Signin?id=' + idUser)
-    // }
-
-    //  onModifierUser={onModifierUser}
+        setState(Object.assign({}, state, data))
+    }, [data])
 
     const onChangeInput = (e) => {
         setState(Object.assign({}, state, { [e.target.name]: e.target.value }))
@@ -297,86 +186,241 @@ function Projects (props) {
     }
 
     const onSubmit = async (e) => {
-        // let resp
-        // if (isModif) {
-        //     resp = await putUser(state)
-        // } else {
-        //     resp = await addUser(state)
-        // }
-        // if (resp) {
-        //     const data = await findOneUser(jwt(resp).idUser)
-        //     // console.log(jwt(resp).idUser, data)
-        //     if (isModif) {
-        //         dispatch({ type: 'PUT_USER', data })
-        //     } else {
-        //         dispatch({ type: 'ADD_USER', data })
-        //     }
-        //     localStorage.setItem('Token', resp)
-        //     setState({
-        //         lastNameUser: '',
-        //         firstNameUser: '',
-        //         imgUser: '',
-        //         passwordUser: '',
-        //         emailUser: '',
-        //         isAdmin: 'n'
-        //     })
-        //     setIsModif(false)
-        // }
-
-        setIsEdit(false)
+        if (IsAdd) {
+            dispatch({ type: 'ADD_PROJECTS', datas: state })
+            setIsAdd(false)
+        } else {
+            dispatch({ type: 'PUT_PROJECTS', datas: state })
+        }
+        setEdit(false)
     }
 
-    const setIsAdd = () => {
-        setState({
-            idProjets: 0,
+    useEffect(() => {
+        animate({ transform: 'translateX(0px)', opacity: 1 })
+    }, [animate, i])
+
+    const onDeleteProject = (idProjets) => {
+        console.log('delete: ', idProjets)
+        dispatch({ type: 'DELETE_PROJECTS', datas: { idProjets } })
+    }
+
+    const onSubmitDialog = (choise) => {
+        const stock = Object.assign({}, state, { technologies: [...state.technologies, ...choise] })
+        setState(stock)
+    }
+    const deleteTech = (id) => {
+        const stock = Object.assign({}, state, { technologies: state.technologies.filter(e => e.idTechnologies !== id) })
+        setState(stock)
+    }
+
+    return (<animated.div key={idProjets} style={style}>
+        <div
+            className='blockProjects shadow-1'
+        >
+            <div className='headerHover'>
+                <div>
+                    { edit
+                        ? <Done
+                            onClick={() => onSubmit() }
+                        />
+                        : <Create
+                            onClick={ () => setEdit(true) }
+                        />
+                    }
+                </div>
+                <div>
+                    {
+                        edit
+                            ? <Clear
+                                onClick={ () => {
+                                    setEdit(false)
+                                    if (IsAdd) {
+                                        setIsAdd(false)
+                                    }
+                                }}
+                            />
+                            : <Delete
+                                onClick={() => onDeleteProject(idProjets)}
+                            />
+                    }
+                </div>
+            </div>
+            <div
+                className='divChangeImage'
+                onMouseEnter={() => setMouse(true)}
+                onMouseLeave={() => setMouse(false)}
+            >
+                <Dropzone
+                    onDrop={ (e) => {
+                        onChangeLoginInputImage(e)
+                    }}
+                >
+                    {({ getRootProps, getInputProps }) => (
+                        <section>
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <div className='changeImage shadow-1' >
+                                    <div>
+                                        {
+                                            state.imgUser
+                                                ? <img src={state.imgUser} alt='image_import'/>
+                                                : <img src={ prefix + '/default.png' } alt='icon_default'/>
+                                        }
+                                    </div>
+                                    { mouse && edit && <p>Change image</p> }
+                                </div>
+                            </div>
+                        </section>
+                    )}
+                </Dropzone>
+            </div>
+            <div style={{ width: '100%', paddingTop: 20 }}>
+                <div className='title'>
+                    {
+                        edit
+                            ? <input
+                                value={ titleProjets}
+                                onChange={ onChangeInput }
+                                name='titleProjets'
+                            />
+                            : titleProjets
+                    }
+                </div>
+                <div className='content'>
+                    {
+                        edit
+                            ? <textarea
+                                value={ contetProjets }
+                                onChange={ onChangeInput }
+                                name='contetProjets'
+                            />
+                            : contetProjets
+                    }
+                </div>
+                <Tech
+                    data={technologies}
+                    alldata={tech}
+                    isEdit={edit}
+                    idProjets={idProjets}
+                    onSubmitDialog={onSubmitDialog}
+                    deleteTech={deleteTech}
+                />
+            </div>
+        </div>
+    </animated.div>)
+}
+
+function Projects (props) {
+    const projects = useSelector(state => state.projects.datas)
+    const [IsAdd, setIsAdd] = useState(false)
+    const dispatch = useDispatch()
+    const datas = React.useMemo(() => [
+        {
+            idProjets: 1,
             imgProjets: '',
-            titleProjets: '',
-            contetProjects: '',
-            updateAt: '',
-            aimeProjets: 0
-        })
-        setIsEdit(false)
+            titleProjets: 'SITE DE VENTE ORDINATEURS',
+            contetProjects: 'lorem upsome',
+            updateAt: '22/04/2002',
+            aimeProjets: 2,
+            technologies: [
+                {
+                    idTechnologies: 1,
+                    imgTechnologies: '',
+                    contentsTechnologies: 'je ne sais pas mois',
+                    nameTechnologies: 'Nodejs',
+                    urlTechnologies: 'https://nodejs.com'
+                }
+            ]
+        },
+        {
+            idProjets: 2,
+            imgProjets: '',
+            titleProjets: 'SITE DE VENTE ORDINATEURS',
+            contetProjects: 'lorem upsome',
+            updateAt: '22/04/2002',
+            aimeProjets: 3,
+            technologies: []
+        }
+    ], [])
+    const dataNew = {
+        idProjets: null,
+        imgProjets: '',
+        titleProjets: '',
+        contetProjects: '',
+        updateAt: '',
+        aimeProjets: 0
     }
+    useEffect(() => {
+        if (datas) {
+            dispatch({ type: 'INIT_PROJECTS', datas })
+        }
+    }, [datas, dispatch])
+
+    // useEffect(() => {
+    //     const smallFunction = async () => {
+    //         // setIsModif(false)
+    //         if (props.id) {
+    //             // const user = await findOneUser(props.id)
+    //             // if (user) {
+    //             //     setState({
+    //             //         idUser: user.idUser,
+    //             //         lastNameUser: user.lastNameUser,
+    //             //         firstNameUser: user.firstNameUser,
+    //             //         imgUser: user.imgUser,
+    //             //         passwordUser: '',
+    //             //         emailUser: user.emailUser,
+    //             //         isAdmin: user.isAdmin
+    //             //     })
+    //             //     setIsModif(true)
+    //             // }
+    //             setState({
+    //                 idProjets: 1,
+    //                 imgProjets: '',
+    //                 titleProjets: 'SITE DE VENTE ORDINATEURS',
+    //                 contetProjects: 'lorem upsome',
+    //                 updateAt: '22/04/2002',
+    //                 aimeProjets: 2
+    //             })
+    //         }
+    //     }
+    //     smallFunction()
+    // }, [props.id, isEdit])
 
     return (
         <div className='Projects'>
-            { isEdit
-                ? <Formulaire
-                    state={state}
-                    setIsAdd={setIsAdd}
-                    onSubmit={onSubmit}
-                    onChangeInput={onChangeInput}
-                    onChangeLoginInputImage={onChangeLoginInputImage}
-                />
-                : <div className='Table'>
-                    <div className='addButton'>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            startIcon={<Add />}
-                            onClick={() => setIsEdit(true)}
-                        >
-                           Nouveau
-                        </Button>
-                    </div>
-                    <div className='header'>
-                            listes des projects
-                    </div>
-                    <div className='body'>
-                        {
-                            membres && membres.map((e, i) => {
-                                return (<Column
-                                    key={e.idMembres}
-                                    data={e}
-                                    i={i}
-                                    onDeleteUser={onDeleteUser}
-                                />)
-                            })
-                        }
-                    </div>
-                </div>
-            }
+            <div className='header'>
+                <p>
+                    Liste des membres actuels
+                </p>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    startIcon={<Add />}
+                    onClick={() => setIsAdd(true)}
+                >
+                   Nouveau
+                </Button>
+            </div>
+            <div className='body'>
+                { IsAdd &&
+                    <BlockProjects
+                        data={dataNew}
+                        i={0}
+                        IsAdd={IsAdd}
+                        setIsAdd={setIsAdd}
+                    />
+                }
+                {
+                    projects && projects.map((e, i) => {
+                        return (<BlockProjects
+                            key={e.idMembres}
+                            data={e}
+                            i={i}
+                        />)
+                    })
+                }
+            </div>
         </div>
     )
 }

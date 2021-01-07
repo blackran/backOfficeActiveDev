@@ -1,0 +1,4 @@
+export const INIT_TYPE_TECH = 'INIT_TYPE_TECH'
+export const ADD_TYPE_TECH = 'ADD_TYPE_TECH'
+export const PUT_TYPE_TECH = 'PUT_TYPE_TECH'
+export const DELETE_TYPE_TECH = 'DELETE_TYPE_TECH'

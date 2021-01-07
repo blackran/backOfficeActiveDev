@@ -15,7 +15,8 @@ const initState = {
             emailMember: 'Nante@gmail.com',
             passwordMember: '',
             imgMember: '',
-            isAdmin: 'n'
+            isAdmin: 'n',
+            technologies: []
         }
     ]
 }

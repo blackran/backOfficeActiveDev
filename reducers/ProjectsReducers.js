@@ -14,7 +14,16 @@ const initState = {
             titleProjets: 'SITE DE VENTE ORDINATEURS',
             contetProjects: 'lorem upsome',
             updateAt: '22/04/2002',
-            aimeProjets: 2
+            aimeProjets: 2,
+            technologies: [
+                {
+                    idTechnologies: 1,
+                    imgTechnologies: '',
+                    contentsTechnologies: 'je ne sais pas mois',
+                    nameTechnologies: 'Nodejs',
+                    urlTechnologies: 'https://nodejs.com'
+                }
+            ]
         }
     ]
 }

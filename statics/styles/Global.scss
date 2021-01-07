@@ -47,6 +47,31 @@
   animation-duration: 2s;
 }
 
+.dialogProjects {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 250px;
+    max-height: 300px;
+    overflow-y: scroll;
+    &>div {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // border: 1px solid green;
+        margin: 5px;
+        cursor: pointer;
+        img {
+            width: 30px;
+            height: auto;
+        }
+    }
+}
+
+
 @keyframes example1 {
     0%   {
         transform: translate(-50%, -50%) rotate(0deg);
